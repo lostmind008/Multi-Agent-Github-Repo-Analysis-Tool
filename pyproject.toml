@@ -1,0 +1,189 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "multi-agent-github-analyzer"
+version = "2.0.0"
+description = "A multi-agent system for comprehensive GitHub repository analysis using LangGraph and multiple LLM providers"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+authors = [
+  {name = "LostMind AI", email = "info@lostmindai.com"},
+]
+maintainers = [
+  {name = "LostMind AI", email = "info@lostmindai.com"},
+]
+keywords = [
+  "github",
+  "analysis",
+  "multi-agent",
+  "langchain",
+  "langgraph",
+  "llm",
+  "repository-analysis",
+  "code-analysis",
+  "ai",
+  "machine-learning"
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Software Development :: Quality Assurance",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Text Processing :: Linguistic",
+]
+dependencies = [
+  "langchain>=0.2.11,<0.3.0",
+  "langchain-community>=0.2.11,<0.3.0",
+  "langchain-openai>=0.1.17,<0.2.0",
+  "langchain-google-genai>=1.0.8,<2.0.0",
+  "langchain-anthropic>=0.1.21,<0.2.0",
+  "langchain-core>=0.2.28,<0.3.0",
+  "langgraph>=0.1.19,<0.2.0",
+  "PyGithub>=2.3.0,<3.0.0",
+  "faiss-cpu>=1.8.0,<2.0.0",
+  "tiktoken>=0.7.0,<1.0.0",
+  "openai>=1.37.0,<2.0.0",
+  "reportlab>=4.2.2,<5.0.0",
+  "python-dotenv>=1.0.1,<2.0.0",
+  "requests>=2.32.3,<3.0.0",
+  "tenacity>=8.5.0,<9.0.0",
+  "pydantic>=2.8.2,<3.0.0",
+  "numpy>=1.24.0,<2.0.0",
+  "rich>=13.7.1,<14.0.0",
+  "typing-extensions>=4.12.2,<5.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.4.0",
+  "pytest-cov>=4.1.0",
+  "black>=23.7.0",
+  "isort>=5.12.0",
+  "flake8>=6.0.0",
+  "mypy>=1.5.0",
+  "pre-commit>=3.3.0",
+]
+performance = [
+  "psutil>=6.0.0,<7.0.0",
+  "uvloop>=0.19.0,<1.0.0; sys_platform != 'win32'",
+]
+windows = [
+  "colorama>=0.4.6,<1.0.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/lostmind008/Multi-Agent-Github-Repo-Analysis-Tool"
+"Documentation" = "https://github.com/lostmind008/Multi-Agent-Github-Repo-Analysis-Tool/blob/main/README.md"
+"Repository" = "https://github.com/lostmind008/Multi-Agent-Github-Repo-Analysis-Tool"
+"Bug Tracker" = "https://github.com/lostmind008/Multi-Agent-Github-Repo-Analysis-Tool/issues"
+"Changelog" = "https://github.com/lostmind008/Multi-Agent-Github-Repo-Analysis-Tool/releases"
+"LostMind AI" = "https://www.LostMindAI.com"
+
+[project.scripts]
+github-analyzer = "main:main"
+
+[tool.setuptools.packages.find]
+where = [".", "src"]
+include = ["src*"]
+exclude = ["tests*", "docs*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.txt", "*.md", "*.yml", "*.yaml", "*.json"]
+
+[tool.black]
+line-length = 100
+target-version = ['py38']
+include = '\.pyi?$'
+extend-exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | venv
+  )/
+)
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = [
+    "tests",
+]
+python_files = "test_*.py"
+python_functions = "test_*"
+python_classes = "Test*"
+markers = [
+    "slow: marks tests as slow (deselect with '-m "not slow"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+[tool.coverage.run]
+source = ["src", "main.py"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "setup.py",
+    "venv/*",
+    "*/__pycache__/*"
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+skip_empty = false
+sort = "Cover"
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
