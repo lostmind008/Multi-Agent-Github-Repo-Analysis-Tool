@@ -1,0 +1,23 @@
+# Core LLM & agent stack
+langchain>=0.2.0,<0.3.0
+langchain-community>=0.2.0,<0.3.0
+langchain-openai>=0.1.0,<0.2.0
+langchain-google-genai>=1.0.0,<2.0.0
+langchain-anthropic>=0.1.0,<0.2.0
+# langchain-xai==0.1.0          # Skip due to dependency conflicts
+langgraph>=0.0.60,<0.1.0
+
+# GitHub API client
+PyGithub==2.3.0
+
+# Vector store & embeddings (simplified for testing)
+# faiss-cpu==1.8.0            # Skip for now - build issues
+# tiktoken==0.7.0              # Skip for now - build issues
+
+# PDF generation
+reportlab==4.2.0
+
+# CLI & utilities
+python-dotenv==1.0.1
+argparse==1.4.0
+requests==2.32.3
