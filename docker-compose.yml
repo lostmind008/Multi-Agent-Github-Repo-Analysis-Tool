@@ -1,0 +1,112 @@
+# Multi-Agent GitHub Repository Analysis Tool - Docker Compose
+# Built by LostMind AI (www.LostMindAI.com)
+
+version: '3.8'
+
+services:
+  github-analyzer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: lostmindai/github-analyzer:latest
+    container_name: github-analyzer
+    
+    # Environment configuration
+    env_file:
+      - .env
+    
+    # Volume mounts for persistent data
+    volumes:
+      - ./reports:/app/reports:rw
+      - ./logs:/app/logs:rw
+      - .env:/app/.env:ro
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.25'
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "python", "-c", "import src.config; print('OK')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    
+    # Security options
+    security_opt:
+      - no-new-privileges:true
+    read_only: false
+    
+    # User mapping (optional - comment out if not needed)
+    # user: "1000:1000"
+    
+    # Default command override examples:
+    # command: ["python", "main.py", "--user", "octocat", "--repos", "Hello-World"]
+    
+    # Network configuration
+    networks:
+      - analyzer-network
+    
+    # Port mapping (if needed for future web interface)
+    # ports:
+    #   - "8080:8080"
+
+  # Optional: Database for storing analysis results
+  # Uncomment if you want to add persistent storage
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: analyzer-db
+  #   environment:
+  #     POSTGRES_DB: github_analyzer
+  #     POSTGRES_USER: analyzer
+  #     POSTGRES_PASSWORD: your_secure_password
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - analyzer-network
+  #   restart: unless-stopped
+
+  # Optional: Redis for caching (for future enhancements)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: analyzer-cache
+  #   command: redis-server --appendonly yes
+  #   volumes:
+  #     - redis_data:/data
+  #   networks:
+  #     - analyzer-network
+  #   restart: unless-stopped
+
+networks:
+  analyzer-network:
+    driver: bridge
+    name: github-analyzer-network
+
+# Optional volumes for persistent data
+# volumes:
+#   postgres_data:
+#     driver: local
+#   redis_data:
+#     driver: local
+
+# Development override file usage:
+# Create docker-compose.override.yml for development settings
+# Example development overrides:
+# services:
+#   github-analyzer:
+#     volumes:
+#       - .:/app:rw  # Mount source code for development
+#     environment:
+#       - DEBUG=true
+#     command: ["python", "main.py", "--validate-only"]
